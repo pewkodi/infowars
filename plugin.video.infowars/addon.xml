@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.infowars"
        name="Infowars"
-       version="2.1.5"
+       version="2.1.6"
        provider-name="Thomas Meadows, Spinalcracker">
   <requires>
 		<import addon="xbmc.python" version="2.24.0"/>
@@ -15,7 +15,7 @@
     <summary lang="en_GB">Videos from Infowars.com Including live daily shows</summary>
     <description lang="en_GB">Videos from Infowars.com Including live daily shows</description>
 	<news>
-Version 2.1.5
+Version 2.1.6
 - Fixed On demand section
 - Added On demand menu navigation
 - Added Banned.video icon

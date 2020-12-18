@@ -355,15 +355,17 @@ def ToTop():
 
 def Menu_MainMenu(): #The Main Menu
     WhereAmI('@ the Main Menu')
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream2-infostream2/_definst_/live.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','orange')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream3-infostream3/_definst_/live.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream4-infostream4/_definst_/live.m3u8'},{'title':  cFL_('Fire Power with Will Johnson - (Loops After Airing)','red')},is_folder=False,img=FPIcon,fanart=FPFanart)
-    IW_addon.add_directory({'mode': 'PlayURL','url':'https://infostream.secure.footprint.net/hls-live/infostream-infostream/_definst_/live.m3u8'},{'title':  cFL_('Live Shows & Special Events','green')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://freespeech.akamaized.net/hls/live/2016712/live2/playlist.m3u8'},{'title':  cFL_('The Alex Jones Show - (Loops After Airing)','lime')},is_folder=False,img=AJSIcon,fanart=IW_artFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://freespeech.akamaized.net/hls/live/2016873/live3/playlist.m3u8'},{'title':  cFL_('The David Knight Show - (Loops After Airing)','orange')},is_folder=False,img=DKSIcon,fanart=DKSFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://freespeech.akamaized.net/hls/live/2016873/live4/playlist.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - (Loops After Airing)','purple')},is_folder=False,img=WarRoomIcon,fanart=WarRoomFanart)
+    #IW_addon.add_directory({'mode': 'PlayURL','url':''},{'title':  cFL_('American Countdown - (Loops After Airing)','red')},is_folder=False,img=IWODIcon,fanart=IWODFanart)
+    IW_addon.add_directory({'mode': 'PlayURL','url':'https://freespeech.akamaized.net/hls/live/2016712/live1/playlist.m3u8'},{'title':  cFL_('Live Shows & Special Events','green')},is_folder=False,img=IWLiveSEIcon,fanart=IWLiveSEFanart)
     IW_addon.add_directory({'mode': 'AJShowArchiveSubMenu','title':'On Demand Videos (Banned.video)'},{'title':  cFL_('On Demand Videos (Banned.video)','cyan')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     IW_addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=PJWIcon,fanart=PJWFanart)
     IW_addon.add_directory({'mode': 'MillieWeaverSubMenu','title':'Millie Weaver (Youtube Video)'},{'title':  cFL_('Millie Weaver (Youtube)','pink')},is_folder=True,img=MWIcon,fanart=MWFanart)
     IW_addon.add_directory({'mode': 'KaitlinBennettSubMenu','title':'Kaitlin Bennett - Liberty Hangout (Youtube Video)'},{'title':  cFL_('Kaitlin Bennett - Liberty Hangout (Youtube)','yellow')},is_folder=True,img=KBIcon,fanart=KBFanart)
+    IW_addon.add_directory({'mode': 'GregReeseSubMenu','title':'Greg Reese - InfoWars (Youtube Video)'},{'title':  cFL_('Greg Reese - InfoWars (Youtube)','green')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
+    IW_addon.add_directory({'mode': 'JonBowneReportsSubMenu','title':'Jon Bowne Reports - InfoWars (Youtube Video)'},{'title':  cFL_('Jon Bowne Reports - InfoWars (Youtube)','purple')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
     
     eod()
 
@@ -425,7 +427,98 @@ def Kaitlin_Bennett_Sub_Menu(title=''):
     else:
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
 
+    eod()
+
+
+def Greg_Reese_Sub_Menu(title=''):
+    #https://www.youtube.com/channel/UCoZXzeOEtomauxdqLbRlAew
+    WhereAmI('@ Millie Weaver')
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCoZXzeOEtomauxdqLbRlAew'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<entry>(.*?)</entry>")
+        for entry in videos:
+            title = find_single_match(entry,"<titl[^>]+>([^<]+)</title>")
+            plot = find_single_match(entry,"<media\:descriptio[^>]+>([^<]+)</media\:description>")
+            thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
+            video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
+    else:
+        util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
+
     eod()    
+
+
+def Jon_Bowne_Reports_Sub_Menu(title=''):
+    #https://www.youtube.com/channel/UC3P0x8HufuxSNkOiH-25ODQ
+    WhereAmI('@ Millie Weaver')
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC3P0x8HufuxSNkOiH-25ODQ'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<entry>(.*?)</entry>")
+        for entry in videos:
+            title = find_single_match(entry,"<titl[^>]+>([^<]+)</title>")
+            plot = find_single_match(entry,"<media\:descriptio[^>]+>([^<]+)</media\:description>")
+            thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
+            video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
+    else:
+        util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
+
+    eod()    
+
+
+def aj_search(iw,titleCheck):
+
+    hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+    'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
+    'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+    'Accept-Encoding': 'none',
+    'Accept-Language': 'en-US,en;q=0.8',
+    'Connection': 'keep-alive'}
+    data = None
+    tc = titleCheck
+    url = 'https://api.infowarsmedia.com/graphql/'
+    id = "5b9429906a1af769bc31efeb"
+    new_id = iw
+    query = """query IFWGetChannelVideos($id: String!="%s", $limit: Float=20, $offset: Float=0)
+    { getChannel(id: $id)
+    {videos(limit: $limit, offset: $offset)
+    { _id title summary playCount largeImage embedUrl directUrl published videoDuration channel
+    { _id title avatar}
+    }
+    }
+    }"""
+    #print query
+    req = requests.post(url, json={'query': query %(new_id)},headers=hdr)
+
+    type(req)
+
+    len(req.text)
+    aj = json.loads(req.text)
+    try:
+     for a in aj["data"]["getChannel"]["videos"]:
+            #print i 
+            #print (i["title"].encode("utf-8"),i["summary"],i["largeImage"],i["directUrl"])
+              plot = a["summary"].encode("utf-8")                               
+              thumbnail = a["largeImage"]               
+              video_id = a["directUrl"]
+              title = tc+ " - " +a["title"]
+              url = video_id
+              add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+    except:
+      print "Error"   
+                  
+
+
+
+
+
+
 
 def Full_Show_Sub_Menu(title=''):
     WhereAmI('@ Recent Full Length Shows')
@@ -441,9 +534,9 @@ def Full_Show_Sub_Menu(title=''):
 
     dataBV = None
     reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
-    responseBV = urllib2.urlopen(reqBV)
-    contentBV = responseBV.read()
-    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d72c972f230520013554291","5d7a86b1f30956001545dd71","5d7faf08b468d500160c8e3f","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf"]
+    #responseBV = urllib2.urlopen(reqBV)
+    #contentBV = responseBV.read()
+    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d7a86b1f30956001545dd71","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf","5ec2e150244ac5001d2a6486","5f444e76df77c4044ef6adbc","5e4d5777071ff9001c065ce0","5ebae0c5244ac5001d2163e4"]
     ##idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))  *** Save for future switch to javascript dynamic handling ***
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
     IW_addon.log('*******  ' + urlMAIN)
@@ -460,18 +553,28 @@ def Full_Show_Sub_Menu(title=''):
         url = urlMAINID + 'videos/'
 
         data = None
-        req = urllib2.Request(url, data ,hdr)
-        response = urllib2.urlopen(req)
-        data = json.load(response)
-        for item in data["videos"]:
-            title = titleCheck + " - " + item["title"]            
-            plot = item["summary"]                               
-            thumbnail = item["posterThumbnailUrl"]               
-            video_id = item["streamUrl"]                         
-            url = video_id
-            if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
-                add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
-            
+        import requests
+        try:
+         req = requests.get(url=url, data=data, headers=hdr)
+
+        #req = urllib2.Request(url, data ,hdr)
+        #response = urllib2.urlopen(req)
+         type(req)
+         len(req.text)
+
+         data = json.loads(req.text)
+        
+         item = data["featuredVideo"]
+         title = titleCheck + " - " + item["title"]            
+         plot = item["summary"]                               
+         thumbnail = item["posterThumbnailUrl"]               
+         video_id = item["directUrl"]                         
+         url = video_id
+         #if ("FULL" in title or "Full" in title) and ("SHOW" in title or "Show" in title):
+         add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+                  
+        except:
+         print "Error"   
 
     eod()
 
@@ -492,9 +595,9 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
 
     dataBV = None
     reqBV = urllib2.Request(urlBannedVideo, dataBV, hdr)
-    responseBV = urllib2.urlopen(reqBV)
-    contentBV = responseBV.read()
-    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d72c972f230520013554291","5d7a86b1f30956001545dd71","5d7faf08b468d500160c8e3f","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf"]
+    #responseBV = urllib2.urlopen(reqBV)
+    #contentBV = responseBV.read()
+    idBV = ["5b885d33e6646a0015a6fa2d","5b9301172abf762e22bc22fd","5b92d71e03deea35a4c6cdef","5d7a86b1f30956001545dd71","5d7faa8432b5da0013fa65bd","5da504e060be810013cf7252","5d8d03dbd018a5001776876a","5da8c506da090400138c8a6a","5dbb4729ae9e840012c61293","5d9653676f2d2a00179b8a58","5b9429906a1af769bc31efeb","5d7fa9014ffcfc00130304fa","5cf7df690a17850012626701","5dae2e7f612f0a0012d147bf","5ebad3ff244ac5001d2134ff","5e822d4115f81d009d49b580","5ec2e150244ac5001d2a6486","5f444e76df77c4044ef6adbc","5e4d5777071ff9001c065ce0","5ebae0c5244ac5001d2163e4"]
     ##idBV = (find_multiple_matches(contentBV,"<a href=\"\/channel\/(.*?)\""))
     urlMAIN = 'https://api.infowarsmedia.com/api/channel/'
     IW_addon.log('*******  ' + urlMAIN)
@@ -509,22 +612,54 @@ def Alex_Jones_Show_Archive_Sub_Menu(title=''):
         titleCheck = dataMAIN["title"] 
 
         url = urlMAINID + 'videos/'
-
+        import requests
         data = None
-        req = urllib2.Request(url, data ,hdr)
-        response = urllib2.urlopen(req)
-        data = json.load(response)
+        #req = urllib2.Request(url, data ,hdr)
+        iw = idBV[i]
+        
+        try:
+          req = requests.get(url=url, data=data, headers=hdr)
+        #response = urllib2.urlopen(req)
+          type(req)
+          len(req.text)
+        #data = json.load(response)
+          data = json.loads(req.text)
 
-        for item in data["videos"]:
-           title = titleCheck + " - " + item["title"]           
-           plot = item["summary"]                               
-           thumbnail = item["posterThumbnailUrl"]               
-           video_id = item["streamUrl"]                         
-           url = video_id
-           if not "Full Show" in title:
-               add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
-        IW_addon.add_directory({'mode': 'ToTop','title':'=^= Click Here To Return To Top =^='},{'title':  cFL('===[ Click Here To Return To Top ]===','grey')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
- 
+
+
+
+
+
+          item = data["featuredVideo"]
+          title = titleCheck + " - " + item["title"]           
+          plot = item["summary"].encode("utf-8")                               
+          thumbnail = item["posterThumbnailUrl"]               
+          video_id = item["directUrl"]                         
+          url = video_id
+          
+          ############ new search ###############
+          if not "Full Show" in title:
+             #add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+             aj_search(iw, titleCheck)
+
+                       #IW_addon.add_directory({'mode': 'ToTop','title':'=^= Click Here To Return To Top =^='},{'title':  cFL('===[ Click Here To Return To Top ]===','grey')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
+        except:
+          print "Error"
+          aj_search(iw, titleCheck)
+
+          #try:
+          #    for i in data["videos"]:
+          #      title = titleCheck + " - " + i["title"]           
+          #      plot = i["summary"].encode("utf-8")                               
+          #      thumbnail = i["posterThumbnailUrl"]               
+          #      video_id = i["directUrl"]                         
+          #      url = video_id
+                
+          #      add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False)
+          #except:
+          #    print "Error"
+    IW_addon.add_directory({'mode': 'ToTop','title':'=^= Click Here To Return To Top =^='},{'title':  cFL('===[ Click Here To Return To Top ]===','grey')},is_folder=True,img=IWODIcon,fanart=IWODFanart)
+
     eod()
 
 def check_mode(mode=''):
@@ -559,6 +694,8 @@ def check_mode(mode=''):
     elif (mode=='PaulJosephWatsonSubMenu'): Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='MillieWeaverSubMenu'): Millie_Weaver_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='KaitlinBennettSubMenu'): Kaitlin_Bennett_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='GregReeseSubMenu'): Greg_Reese_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='JonBowneReportsSubMenu'): Jon_Bowne_Reports_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='AJShowArchiveSubMenu'): Alex_Jones_Show_Archive_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='FullShowSubMenu'): Full_Show_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): IW_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
