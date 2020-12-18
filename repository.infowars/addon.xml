@@ -6,6 +6,7 @@
     <checksum>https://raw.githubusercontent.com/pewkodi/infowars/master/addons.xml.md5</checksum>
     <datadir zip="true">https://raw.githubusercontent.com/pewkodi/infowars/master/</datadir>
     </dir>
+  </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Install InfoWars Update Add-ons</summary>
     <description>Download and install add-ons from the ChiBo Add-ons repository. See http:// for more information.</description>
