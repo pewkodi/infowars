@@ -30,6 +30,7 @@ Version 2.1.6
 	<source>https://github.com/Spinalcracker/repo-plugins/tree/jarvis/plugin.video.infowars</source>
   	<email></email>
   </extension>
+</addon>
 <addon id="repository.infowars" name="Infowars Update Add-ons" provider-name="PEWKodi Add-ons" version="1.0.4">
   <extension point="xbmc.addon.repository" name="Infowars Update Add-ons Repository">
     <dir>
@@ -44,5 +45,5 @@ Version 2.1.6
     <platform>all</platform>
   </extension>
 </addon>
-</addon>
+
 </addons>
