@@ -30,5 +30,18 @@ Version 2.1.6
 	<source>https://github.com/Spinalcracker/repo-plugins/tree/jarvis/plugin.video.infowars</source>
   	<email></email>
   </extension>
+<addon id="repository.infowars" name="Infowars Update Add-ons" provider-name="PEWKodi Add-ons" version="1.0.4">
+  <extension point="xbmc.addon.repository" name="Infowars Update Add-ons Repository">
+    <dir>
+    <info compressed="false">https://raw.githubusercontent.com/pewkodi/infowars/master/addons.xml</info>
+    <checksum>https://raw.githubusercontent.com/pewkodi/infowars/master/addons.xml.md5</checksum>
+    <datadir zip="true">https://raw.githubusercontent.com/pewkodi/infowars/master/</datadir>
+    </dir>
+  <extension point="xbmc.addon.metadata">
+    <summary>Install InfoWars Update Add-ons</summary>
+    <description>Download and install add-ons from the ChiBo Add-ons repository. See http:// for more information.</description>
+    <platform>all</platform>
+  </extension>
+</addon>
 </addon>
 </addons>
